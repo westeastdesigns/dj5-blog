@@ -3,6 +3,15 @@ from django.db import models
 from django.utils import timezone
 
 
+# adds both the default objects manager 
+#   and the published custom manager to the Post model
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return (
+            super().get_queryset().filter(status=Post.Status.PUBLISHED)
+        )
+
+
 # Post class defines database tables for posts of the blog application
 class Post(models.Model):
     """Post class defines data related to blog posting
@@ -51,12 +60,17 @@ class Post(models.Model):
         default=Status.DRAFT
     )
 
-    
+    # for PublishedManager
+    #   the default manager
+    objects = models.Manager()
+    #   custom manager
+    published = PublishedManager()
+
     class Meta:
         # sets default sort order reverse chronologically, newest posts first
         ordering = ['-publish']
         # defines database index for the publish field
-        # NOTE MySQL doesn't support index ordering, it would create a normal index
+        # MySQL doesn't support index ordering, it would create a normal index
         indexes = [
             models.Index(fields=['-publish']),
         ]
