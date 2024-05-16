@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -36,7 +37,10 @@ class Post(models.Model):
         PUBLISHED = 'PB', 'Published'
 
     title = models.CharField(max_length=250)
-    slug = models.SlugField(max_length=250)
+    slug = models.SlugField(
+        max_length=250,
+        unique_for_date='publish'
+    )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -82,3 +86,22 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     
+
+    def get_absolute_url(self):
+        """get_absolute_url dynamically builds the url using the name defined in urlpatterns.
+        It uses the year, month, day, and slug of the Post object as a positional argument.
+        mysite/urls.py  defines blog namespace.
+        blog/urls.py    defines post_detail url.
+
+        Returns:
+            string: url of blog post to retrieve
+        """
+        return reverse(
+            'blog:post_detail',
+            args=[
+                self.publish.year,
+                self.publish.month,
+                self.publish.day,
+                self.slug
+            ]
+        )
