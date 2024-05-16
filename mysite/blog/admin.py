@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Post
 
+
 # Registers models for the blog application
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -11,5 +12,6 @@ class PostAdmin(admin.ModelAdmin):
     raw_id_fields = ['author']
     date_hierarchy = 'publish'
     ordering = ['status', 'publish']
+    # Show Facets is a new feature introduced in Django 5, shows count in filter
     show_facets = admin.ShowFacets.ALWAYS
     
