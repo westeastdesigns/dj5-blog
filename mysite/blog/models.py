@@ -14,7 +14,7 @@ class PublishedManager(models.Manager):
 
 # Post class defines database tables for posts of the blog application
 class Post(models.Model):
-    """Post class defines data related to blog posting
+    """Post class defines data related to blog posting in the blog application.
 
     Args:
         title (CharField): title of the blog post
@@ -29,7 +29,8 @@ class Post(models.Model):
         CharField: returns the title of the blog post
     """
     class Status(models.TextChoices):
-        """allows management of blog post status: DRAFT or PUBLISHED
+        """allows management of blog post status: DRAFT or PUBLISHED.
+        Utilizes new options for declaring model field choices, updated in Django 5 
         """
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
@@ -52,11 +53,13 @@ class Post(models.Model):
     # saves the date automatically, records when the post object was last updated
     updated = models.DateTimeField(auto_now=True)
 
-    # defines draft or published status of post
+    # defines draft or published status of post. 
+    # Utilizes new options for declaring model field choices, updated in Django 5 
     status = models.CharField(
         max_length=2,
         # limits the choices to those in Status
         choices=Status,
+        # sets the default status of the post as a DRAFT
         default=Status.DRAFT
     )
 

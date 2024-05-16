@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # BlogConfig is the app configuration class for the blog app  
     'blog.apps.BlogConfig',
 ]
 
