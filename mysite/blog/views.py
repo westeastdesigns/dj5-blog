@@ -1,11 +1,26 @@
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404, render
+from django.views.generic import ListView
 
 from .models import Post
 
 
+class PostListView(ListView):
+    """PostListView class-based view paginates and displays the list of all posts.
+    Inherits from ListView.
+
+    Args:
+        ListView (generic class): allows any type of object to be listed
+    """
+
+    queryset = Post.published.all()
+    context_object_name = "posts"
+    paginate_by = 3
+    template_name = "blog/post/list.html"
+
+
 def post_list(request):
-    """post_list paginates and displays the list of all posts.
+    """post_list function-based view paginates and displays the list of all posts.
     paginator assigned by Paginator class returns 3 posts from post_list per page.
     page_number variable stores the page GET HTTP parameter, page 1 loads by default.
     posts variable stores objects from the chosen Page object from the page() method.
