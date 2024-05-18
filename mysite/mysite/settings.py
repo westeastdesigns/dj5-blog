@@ -23,15 +23,20 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# defines a new setting for site ID to add a sitemap
+SITE_ID = 1
 
 # Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
+    "django.contrib.admindocs",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sites",
+    "django.contrib.sitemaps",
     "django.contrib.staticfiles",
     # third party package
     "taggit",
