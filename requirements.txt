@@ -5,6 +5,7 @@ dill==0.3.8
 Django==5.0.6
 django-taggit==5.0.1
 isort==5.13.2
+Markdown==3.6
 mccabe==0.7.0
 platformdirs==4.2.2
 pylint==3.2.0
