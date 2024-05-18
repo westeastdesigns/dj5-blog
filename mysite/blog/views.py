@@ -3,12 +3,13 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
+from taggit.models import Tag
 
 from .forms import CommentForm, EmailPostForm
 from .models import Post
 
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     """post_list function-based view paginates and displays the list of all posts.
     paginator assigned by Paginator class returns 3 posts from post_list per page.
     page_number variable stores the page GET HTTP parameter, page 1 loads by default.
@@ -16,11 +17,17 @@ def post_list(request):
 
     Args:
         request (object): required by all views
+        tag_slug (str): default value is None, the parameter will pass in the URL
 
     Returns:
         url (list.html): renders the list of posts with the given template
     """
     post_list = Post.published.all()
+    # optionally filter posts by tag
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        post_list = post_list.filter(tags__in=[tag])
     # Paginates with three posts per page
     paginator = Paginator(post_list, 3)
     page_number = request.GET.get("page", 1)
@@ -32,7 +39,7 @@ def post_list(request):
     except EmptyPage:
         # if page_number is out of range, get last page of results
         posts = paginator.page(paginator.num_pages)
-    return render(request, "blog/post/list.html", {"posts": posts})
+    return render(request, "blog/post/list.html", {"posts": posts, "tag": tag})
 
 
 def post_detail(request, year, month, day, post):
